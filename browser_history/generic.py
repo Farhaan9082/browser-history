@@ -278,8 +278,9 @@ class Browser(abc.ABC):
                             tzinfo=self._local_tz
                         ),
                         url,
+                        title,
                     )
-                    for d, url in cursor.fetchall()
+                    for d, url, title in cursor.fetchall()
                 ]
                 output_object.histories.extend(date_histories)
                 if sort:
@@ -586,7 +587,8 @@ class ChromiumBasedBrowser(Browser, abc.ABC):
                 datetime(
                     visits.visit_time/1000000-11644473600, 'unixepoch', 'localtime'
                 ) as 'visit_time',
-                urls.url
+                urls.url,
+                urls.title
             FROM
                 visits INNER JOIN urls ON visits.url = urls.id
             WHERE
